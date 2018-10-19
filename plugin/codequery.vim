@@ -13,7 +13,7 @@ let g:loaded_codequery = 1
 
 " Init with default value
 if !exists('g:codequery_find_text_cmd')
-    let g:codequery_find_text_cmd = 'Ack!'
+    let g:codequery_find_text_cmd = 'Rg'
 endif
 if !exists('g:codequery_find_text_from_current_file_dir')
     let g:codequery_find_text_from_current_file_dir = 0
