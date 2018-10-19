@@ -1,5 +1,41 @@
 " =============================================================================
 " Entries
+"
+
+let s:codequery_last_buffer = ''
+let s:project_root_index = []
+
+
+function! s:get_project_root_of_this_buffer()
+	if empty(g:codequery_db_path)
+		return ""
+	endif
+
+	if empty(g:codequery_db_path)
+		if !has("win32")
+			let l:path_sep = "\\"
+		else
+			let l:path_sep = "/"
+		endif
+
+		for project_root in split(globpath(g:codequery_db_path, "*"), "\n")
+			call add(s:project_root_index, fnamemodify(project_root, ":t:gs?\%?" . l:path_sep . "?"))
+		endfor
+	endif
+
+	let l:cur_path = expand("%:p:h")
+	for project_root in s:project_root_index
+		if !empty(matchstr(l:cur_path, project_root))
+			return project_root
+		endif
+	endfor
+
+	return ""
+endfunction
+
+
+function! s:add_project_root_to_db_path_index(fpath)
+endfunction
 
 
 " `lcd` brings side effect !!
@@ -10,7 +46,7 @@ function! codequery#db#find_db_path(filetype) abort
         let db_name = a:filetype . '.db'
     endif
 
-    let lookup_path = findfile(expand('%:p:h') . '/' . db_name, '.')
+    let lookup_path = findfile(db_name, ".;")
 
     if !empty(lookup_path)
         lcd %:p:h
