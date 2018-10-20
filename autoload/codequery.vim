@@ -10,7 +10,7 @@ let g:codequery_supported_filetype_list = g:c_family_filetype_list +
     \ ['python', 'javascript', 'go', 'ruby', 'java', 'c', 'cpp']
 
 
-let s:menu_subcommands = [ 'Unite' ]
+let s:menu_subcommands = [ 'Unite', 'Denite' ]
 
 
 function! s:check_filetype(filetype) abort
@@ -229,13 +229,13 @@ function! codequery#show_menu(args) abort
     let args_num = len(args)
 
     if args_num > 0 && index(s:menu_subcommands, args[0]) != -1
-        if args[0] ==# 'Unite'
+        if args[0] ==# 'Unite' || args[0] ==# 'Denite'
             if args_num > 1 && args[1] ==# 'Magic'
                 let magic_menu = 1
             else
                 let magic_menu = 0
             endif
-            call codequery#menu#use_unite_menu(magic_menu)
+            call codequery#menu#use_unite_menu(magic_menu, args[0])
             return
         endif
     endif

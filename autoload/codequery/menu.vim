@@ -17,7 +17,7 @@ endfunction
 
 
 
-function! codequery#menu#use_unite_menu(magic) abort
+function! codequery#menu#use_unite_menu(magic, menu_subcommand) abort
     let cword = codequery#query#get_valid_cursor_word()
     let menu_frequent_cmds = [['▷  Find Symbol', 'CodeQuery Symbol'],
                              \['▷  Find Text', 'CodeQuery Text']]
@@ -106,13 +106,24 @@ function! codequery#menu#use_unite_menu(magic) abort
                          \ + menu_goto_magic
     endif
 
-    if !exists('g:unite_source_menu_menus')
-        let g:unite_source_menu_menus = {}
+    if a:menu_subcommand ==# 'Unite'
+        if !exists('g:unite_source_menu_menus')
+            let g:unite_source_menu_menus = {}
+        endif
+        let g:unite_source_menu_menus.codequery = {
+            \ 'description' : menu_description,
+        \}
+        let g:unite_source_menu_menus.codequery.command_candidates = cmd_candidates
+        execute 'Unite -silent -prompt-visible -prompt=::' . cword
+                    \ . ':: menu:codequery'
+    else
+        let s:menus = {}
+        let s:menus.codequery = {
+            \ 'description' : menu_description,
+        \}
+        let s:menus.codequery.command_candidates = cmd_candidates
+        call denite#custom#var('menu', 'menus', s:menus)
+        execute 'Denite -prompt=::' . cword
+                    \ . ':: menu:codequery'
     endif
-    let g:unite_source_menu_menus.codequery = {
-        \ 'description' : menu_description,
-    \}
-    let g:unite_source_menu_menus.codequery.command_candidates = cmd_candidates
-    execute 'Unite -silent -prompt-visible -prompt=::' . cword
-                \ . ':: menu:codequery'
 endfunction
