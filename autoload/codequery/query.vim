@@ -162,7 +162,7 @@ function! codequery#query#prettify_qf_layout_and_map_keys(results) abort
         nnoremap <buffer> D :CodeQueryAgain Child<CR>
 
         nnoremap <buffer> m :CodeQueryMenu Unite Magic<CR>
-        nnoremap <buffer> q :cclose<CR>
+        nnoremap <buffer> <Esc> :cclose<CR>
         nnoremap <buffer> \ :CodeQueryFilter 
 
         nnoremap <buffer> p <CR><C-W>p
